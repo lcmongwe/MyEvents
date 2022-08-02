@@ -1,0 +1,55 @@
+{% extends 'events/base.html' %}
+{% block content%}
+<h2>my events</h2>
+<!-- {{me}} -->
+<br>
+{%for event in events%}
+<!-- <li>{{event}} at {{event.venue}} | {{event.event_date}}</li> -->
+
+<div class="card">
+  <div class="card-header">
+    <strong> {{event}}</strong>
+  </div>
+  <div class="card-body">
+    <ul>
+      <li>Date: {{event.event_date}}</li>
+      <li>Venue: {{event.venue}}</li>
+      <li>Venue Website: {{event.venue.web}}</li>
+      <li>Manager: {{event.manager}}</li>
+      <li>Description: {{event.description}}</li>
+      <li>
+        Attendees:<br />
+        {%for user in event.attendees.all %} {{user}} <br />
+        {%endfor%}
+      </li>
+    </ul>
+  </div>
+  {% if user.is_authenticated%}
+    {%if user == event.manager%}
+
+        <div class="card-footer text-muted">
+          
+          <a
+            href="{% url 'update_event' event.id %}"
+            class="btn btn-outline-secondary btn-sm"
+          >Update Event</a>
+
+            <a
+            href="{% url 'delete_event' event.id %}"
+            class="btn btn-outline-danger btn-sm"
+          >Delete Event</a>
+          
+        </div>
+  {%else%}
+  <!-- <h2>access denied,only event manager can delete</h2>
+  Logged in User:{{user}}
+  <br>
+  Event Manager:{{event.manager}}
+  <br /> -->
+  {%endif%}
+  {%endif%}
+</div>
+<br />
+<br />
+{%endfor%}
+{%endblock%}
